@@ -1,18 +1,18 @@
 <?php
 
 /**
- * Define all the restore steps that will be used by the restore_testmodule_activity_task
+ * Define all the restore steps that will be used by the restore_digitalsignature_activity_task
  */
 
 /**
- * Structure step to restore one testmodule activity
+ * Structure step to restore one digitalsignature activity
  *
- * @package   mod_testmodule
+ * @package   mod_digitalsignature
  * @category  backup
  * @copyright 2016 Your Name <your@email.address>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class restore_testmodule_activity_structure_step extends restore_activity_structure_step {
+class restore_digitalsignature_activity_structure_step extends restore_activity_structure_step {
 
     /**
      * Defines structure of path elements to be processed during the restore
@@ -22,7 +22,7 @@ class restore_testmodule_activity_structure_step extends restore_activity_struct
     protected function define_structure() {
 
         $paths = array();
-        $paths[] = new restore_path_element('testmodule', '/activity/testmodule');
+        $paths[] = new restore_path_element('digitalsignature', '/activity/digitalsignature');
 
         // Return the paths wrapped into standard activity structure.
         return $this->prepare_activity_structure($paths);
@@ -33,7 +33,7 @@ class restore_testmodule_activity_structure_step extends restore_activity_struct
      *
      * @param array $data parsed element data
      */
-    protected function process_testmodule($data) {
+    protected function process_digitalsignature($data) {
         global $DB;
 
         $data = (object) $data;
@@ -53,8 +53,8 @@ class restore_testmodule_activity_structure_step extends restore_activity_struct
             $data->grade = -($this->get_mappingid('scale', abs($data->grade)));
         }
 
-        // Create the testmodule instance.
-        $newitemid = $DB->insert_record('testmodule', $data);
+        // Create the digitalsignature instance.
+        $newitemid = $DB->insert_record('digitalsignature', $data);
         $this->apply_activity_instance($newitemid);
     }
 
@@ -62,7 +62,7 @@ class restore_testmodule_activity_structure_step extends restore_activity_struct
      * Post-execution actions
      */
     protected function after_execute() {
-        // Add testmodule related files, no need to match by itemname (just internally handled context).
-        $this->add_related_files('mod_testmodule', 'intro', null);
+        // Add digitalsignature related files, no need to match by itemname (just internally handled context).
+        $this->add_related_files('mod_digitalsignature', 'intro', null);
     }
 }

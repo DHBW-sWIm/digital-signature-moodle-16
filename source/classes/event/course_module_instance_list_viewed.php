@@ -1,21 +1,21 @@
 <?php
 
 /**
- * The mod_testmodule instance list viewed event.
+ * The mod_digitalsignature instance list viewed event.
  *
- * @package    mod_testmodule
+ * @package    mod_digitalsignature
  * @copyright  2016 Your Name <your@email.address>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_testmodule\event;
+namespace mod_digitalsignature\event;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * The mod_testmodule instance list viewed event class.
+ * The mod_digitalsignature instance list viewed event class.
  *
- * @package    mod_testmodule
+ * @package    mod_digitalsignature
  * @copyright  2016 Your Name <your@email.address>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

@@ -47,7 +47,7 @@ if ($mform->is_cancelled()) {
 } else if ($fromform = $mform->get_data()) {
     //Handle form successful operation, if button is present on form
     $SESSION->formdata = $fromform;
-    $returnurl = new moodle_url('/mod/testmodule/view_detail.php', array('id' => $cm->id));
+    $returnurl = new moodle_url('/mod/digitalsignature/view_detail.php', array('id' => $cm->id));
     redirect($returnurl);
 } else {
     // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed

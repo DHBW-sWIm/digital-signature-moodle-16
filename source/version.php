@@ -2,7 +2,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_testmodule';
+$plugin->component = 'mod_digitalsignature';
 $plugin->version = 2018090900;
 $plugin->release = 'v0.0';
 $plugin->requires = 2014051200;

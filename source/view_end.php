@@ -30,7 +30,7 @@ if ($mform->is_cancelled()) {
     //Remove SESSION data for form
     unset($SESSION->formdata);
     // Redirect to the course main page.
-    $returnurl = new moodle_url('/mod/testmodule/view.php', array('id' => $cm->id));
+    $returnurl = new moodle_url('/mod/digitalsignature/view.php', array('id' => $cm->id));
     redirect($returnurl);
 } else {
     // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed

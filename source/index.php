@@ -13,12 +13,12 @@ require_course_login($course);
 $params = array(
     'context' => context_course::instance($course->id)
 );
-$event = \mod_testmodule\event\course_module_instance_list_viewed::create($params);
+$event = \mod_digitalsignature\event\course_module_instance_list_viewed::create($params);
 $event->add_record_snapshot('course', $course);
 $event->trigger();
 
-$strname = get_string('modulenameplural', 'mod_testmodule');
-$PAGE->set_url('/mod/testmodule/index.php', array('id' => $id));
+$strname = get_string('modulenameplural', 'mod_digitalsignature');
+$PAGE->set_url('/mod/digitalsignature/index.php', array('id' => $id));
 $PAGE->navbar->add($strname);
 $PAGE->set_title("$course->shortname: $strname");
 $PAGE->set_heading($course->fullname);
@@ -27,8 +27,8 @@ $PAGE->set_pagelayout('incourse');
 echo $OUTPUT->header();
 echo $OUTPUT->heading($strname);
 
-if (!$testmodules = get_all_instances_in_course('testmodule', $course)) {
-    notice(get_string('nonewmodules', 'testmodule'), new moodle_url('/course/view.php', array('id' => $course->id)));
+if (!$digitalsignatures = get_all_instances_in_course('digitalsignature', $course)) {
+    notice(get_string('nonewmodules', 'digitalsignature'), new moodle_url('/course/view.php', array('id' => $course->id)));
 }
 
 $usesections = course_format_uses_sections($course->format);
@@ -47,7 +47,7 @@ if ($usesections) {
 
 $modinfo = get_fast_modinfo($course);
 $currentsection = '';
-foreach ($modinfo->instances['testmodule'] as $cm) {
+foreach ($modinfo->instances['digitalsignature'] as $cm) {
     $row = array();
     if ($usesections) {
         if ($cm->sectionnum !== $currentsection) {

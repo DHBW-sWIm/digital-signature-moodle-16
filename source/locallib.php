@@ -12,7 +12,7 @@ require_once(__DIR__ . '/lib/autoload.php');
 
 defined('MOODLE_INTERNAL') || die();
 
-function testmodule_do_something($string) {
+function digitalsignature_do_something($string) {
     return $string;
 }
 

@@ -13,7 +13,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
 
-class mod_testmodule_mod_form extends moodleform_mod {
+class mod_digitalsignature_mod_form extends moodleform_mod {
 
     /**
      * Defines forms elements
@@ -27,7 +27,7 @@ class mod_testmodule_mod_form extends moodleform_mod {
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
         // Adding the standard "name" field.
-        $mform->addElement('text', 'name', get_string('testmodulename', 'testmodule'), array('size' => '64'));
+        $mform->addElement('text', 'name', get_string('digitalsignaturename', 'digitalsignature'), array('size' => '64'));
         if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('name', PARAM_TEXT);
         } else {
@@ -35,7 +35,7 @@ class mod_testmodule_mod_form extends moodleform_mod {
         }
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
-        $mform->addHelpButton('name', 'testmodulename', 'testmodule');
+        $mform->addHelpButton('name', 'digitalsignaturename', 'digitalsignature');
 
         // Adding the standard "intro" and "introformat" fields.
         if ($CFG->branch >= 29) {
@@ -44,12 +44,12 @@ class mod_testmodule_mod_form extends moodleform_mod {
             $this->add_intro_editor();
         }
 
-        // Adding the rest of testmodule settings, spreading all them into this fieldset
+        // Adding the rest of digitalsignature settings, spreading all them into this fieldset
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
-        $mform->addElement('static', 'label1', 'testmodulesetting1', 'Your testmodule fields go here. Replace me!');
+        $mform->addElement('static', 'label1', 'digitalsignaturesetting1', 'Your digitalsignature fields go here. Replace me!');
 
-        $mform->addElement('header', 'testmodulefieldset', get_string('testmodulefieldset', 'testmodule'));
-        $mform->addElement('static', 'label2', 'testmodulesetting2', 'Your testmodule fields go here. Replace me!');
+        $mform->addElement('header', 'digitalsignaturefieldset', get_string('digitalsignaturefieldset', 'digitalsignature'));
+        $mform->addElement('static', 'label2', 'digitalsignaturesetting2', 'Your digitalsignature fields go here. Replace me!');
 
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();

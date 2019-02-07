@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file keeps track of upgrades to the testmodule module
+ * This file keeps track of upgrades to the digitalsignature module
  *
  * Sometimes, changes between versions involve alterations to database
  * structures and other major things that may break installations. The upgrade
@@ -10,7 +10,7 @@
  * it cannot do itself, it will tell you what you need to do.  The commands in
  * here will all be database-neutral, using the functions defined in DLL libraries.
  *
- * @package    mod_testmodule
+ * @package    mod_digitalsignature
  * @copyright  2016 Your Name <your@email.address>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -18,12 +18,12 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Execute testmodule upgrade from the given old version
+ * Execute digitalsignature upgrade from the given old version
  *
  * @param int $oldversion
  * @return bool
  */
-function xmldb_testmodule_upgrade($oldversion) {
+function xmldb_digitalsignature_upgrade($oldversion) {
     global $DB;
 
     $dbman = $DB->get_manager(); // Loads ddl manager and xmldb classes.
@@ -39,10 +39,10 @@ function xmldb_testmodule_upgrade($oldversion) {
      *
      * Lines below (this included)  MUST BE DELETED once you get the first version
      * of your module ready to be installed. They are here only
-     * for demonstrative purposes and to show how the testmodule
+     * for demonstrative purposes and to show how the digitalsignature
      * iself has been upgraded.
      *
-     * For each upgrade block, the file testmodule/version.php
+     * For each upgrade block, the file digitalsignature/version.php
      * needs to be updated . Such change allows Moodle to know
      * that this file has to be processed.
      *
@@ -56,8 +56,8 @@ function xmldb_testmodule_upgrade($oldversion) {
      */
     if ($oldversion < 2007040100) {
 
-        // Define field course to be added to testmodule.
-        $table = new xmldb_table('testmodule');
+        // Define field course to be added to digitalsignature.
+        $table = new xmldb_table('digitalsignature');
         $field = new xmldb_field('course', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'id');
 
         // Add field course.
@@ -65,8 +65,8 @@ function xmldb_testmodule_upgrade($oldversion) {
             $dbman->add_field($table, $field);
         }
 
-        // Define field intro to be added to testmodule.
-        $table = new xmldb_table('testmodule');
+        // Define field intro to be added to digitalsignature.
+        $table = new xmldb_table('digitalsignature');
         $field = new xmldb_field('intro', XMLDB_TYPE_TEXT, 'medium', null, null, null, null, 'name');
 
         // Add field intro.
@@ -74,8 +74,8 @@ function xmldb_testmodule_upgrade($oldversion) {
             $dbman->add_field($table, $field);
         }
 
-        // Define field introformat to be added to testmodule.
-        $table = new xmldb_table('testmodule');
+        // Define field introformat to be added to digitalsignature.
+        $table = new xmldb_table('digitalsignature');
         $field = new xmldb_field('introformat', XMLDB_TYPE_INTEGER, '4', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0',
             'intro');
 
@@ -86,7 +86,7 @@ function xmldb_testmodule_upgrade($oldversion) {
 
         // Once we reach this point, we can store the new version and consider the module
         // ... upgraded to the version 2007040100 so the next time this block is skipped.
-        upgrade_mod_savepoint(true, 2007040100, 'testmodule');
+        upgrade_mod_savepoint(true, 2007040100, 'digitalsignature');
     }
 
     // Second example, some hours later, the same day 2007/04/01
@@ -94,8 +94,8 @@ function xmldb_testmodule_upgrade($oldversion) {
     // ... "01" in the last two digits of the version).
     if ($oldversion < 2007040101) {
 
-        // Define field timecreated to be added to testmodule.
-        $table = new xmldb_table('testmodule');
+        // Define field timecreated to be added to digitalsignature.
+        $table = new xmldb_table('digitalsignature');
         $field = new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0',
             'introformat');
 
@@ -104,8 +104,8 @@ function xmldb_testmodule_upgrade($oldversion) {
             $dbman->add_field($table, $field);
         }
 
-        // Define field timemodified to be added to testmodule.
-        $table = new xmldb_table('testmodule');
+        // Define field timemodified to be added to digitalsignature.
+        $table = new xmldb_table('digitalsignature');
         $field = new xmldb_field('timemodified', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0',
             'timecreated');
 
@@ -114,8 +114,8 @@ function xmldb_testmodule_upgrade($oldversion) {
             $dbman->add_field($table, $field);
         }
 
-        // Define index course (not unique) to be added to testmodule.
-        $table = new xmldb_table('testmodule');
+        // Define index course (not unique) to be added to digitalsignature.
+        $table = new xmldb_table('digitalsignature');
         $index = new xmldb_index('courseindex', XMLDB_INDEX_NOTUNIQUE, array('course'));
 
         // Add index to course field.
@@ -124,7 +124,7 @@ function xmldb_testmodule_upgrade($oldversion) {
         }
 
         // Another save point reached.
-        upgrade_mod_savepoint(true, 2007040101, 'testmodule');
+        upgrade_mod_savepoint(true, 2007040101, 'digitalsignature');
     }
 
     // Third example, the next day, 2007/04/02 (with the trailing 00),
@@ -133,7 +133,7 @@ function xmldb_testmodule_upgrade($oldversion) {
 
         // Insert code here to perform some actions (same as in install.php).
 
-        upgrade_mod_savepoint(true, 2007040200, 'testmodule');
+        upgrade_mod_savepoint(true, 2007040200, 'digitalsignature');
     }
 
     /*
