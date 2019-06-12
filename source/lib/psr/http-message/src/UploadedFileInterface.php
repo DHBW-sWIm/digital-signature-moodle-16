@@ -107,16 +107,16 @@ interface UploadedFileInterface
     public function getClientFilename();
     
     /**
-     * Retrieve the media type sent by the client.
+     * Retrieve the resources type sent by the client.
      *
      * Do not trust the value returned by this method. A client could send
-     * a malicious media type with the intention to corrupt or hack your
+     * a malicious resources type with the intention to corrupt or hack your
      * application.
      *
      * Implementations SHOULD return the value stored in the "type" key of
      * the file in the $_FILES array.
      *
-     * @return string|null The media type sent by the client or null if none
+     * @return string|null The resources type sent by the client or null if none
      *     was provided.
      */
     public function getClientMediaType();

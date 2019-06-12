@@ -48,7 +48,7 @@ class Response implements ResponseInterface
         412 => 'Precondition Failed',
         413 => 'Request Entity Too Large',
         414 => 'Request-URI Too Large',
-        415 => 'Unsupported Media Type',
+        415 => 'Unsupported resources Type',
         416 => 'Requested range not satisfiable',
         417 => 'Expectation Failed',
         418 => 'I\'m a teapot',

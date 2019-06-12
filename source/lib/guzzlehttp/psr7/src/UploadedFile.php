@@ -179,7 +179,7 @@ class UploadedFile implements UploadedFileInterface
     {
         if (false === $this->isStringOrNull($clientMediaType)) {
             throw new InvalidArgumentException(
-                'Upload file client media type must be a string or null'
+                'Upload file client resources type must be a string or null'
             );
         }
 
