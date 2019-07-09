@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licen
 require_once($CFG->libdir . "/externallib.php");
+defined('MOODLE_INTERNAL') || die();
 
 class local_digitalsignature_external extends external_api {
 
@@ -24,6 +25,8 @@ class local_digitalsignature_external extends external_api {
         return new external_function_parameters(
                 array(
                         'pdfDocument' => new external_value(PARAM_RAW, 'The PDF-Document'),
+                        'documentName' => new external_value(PARAM_TEXT, 'The document name'),
+                        'returnUrl' => new external_value(PARAM_RAW, 'The return URL after the recipient has signed the document'),
                         'signers' => new external_multiple_structure(
                                         new external_single_structure(
                                                 array(
@@ -48,13 +51,14 @@ class local_digitalsignature_external extends external_api {
     }
 
 
-    public static function createEnvelope($pdfDocument, $signers) {
+    public static function createEnvelope($pdfDocument, $documentName, $returnUrl, $signers) {
+        global $DB;
         global $USER;
 
         //Parameter validation
         //REQUIRED
         $params = self::validate_parameters(self::createEnvelope_parameters(),
-                array('pdfDocument' => $pdfDocument, 'signers' => $signers));
+                array('pdfDocument' => $pdfDocument, 'documentName' => $documentName, 'returnUrl' => $returnUrl, 'signers' => $signers));
 
         //Context validation
         //OPTIONAL but in most web service it should present
@@ -66,6 +70,22 @@ class local_digitalsignature_external extends external_api {
         if (!has_capability('moodle/user:viewdetails', $context)) {
             throw new moodle_exception('cannotviewprofile');
         }
+
+        if ($DB->record_exists('recipientdata', array('email' => $signers[0]['email'])) == FALSE) {
+            try {
+                $transaction = $DB->start_delegated_transaction();
+                $DB->insert_record('recipientdata', ['firstname' => $signers[0]['firstName'],
+                                                    'lastname' => $signers[0]['lastName'],
+                                                    'email' => $signers[0]['email'],
+                                                    'returnurl' => $params['returnUrl']],
+                                    $returnid=true, $bulk=false);
+                $transaction->allow_commit();
+            } catch (Exception $e) {
+                $transaction->rollback($e);
+            }
+        }
+
+        $recipient = $DB->get_record('recipientdata', array('email' => $signers[0]['email']), $fields='*', $strictness=IGNORE_MISSING);
 
         $email = "nebenmail09@gmail.com";
         $password = "qwert12345";
@@ -98,42 +118,42 @@ class local_digitalsignature_external extends external_api {
         $data = array("accountId" => $accountId,
                 "emailSubject" => "Please sign this document.",
                 "documents" => array(
-                        array(
-                                "documentId" => "1",
-                                "name" => "Bachelorthesis.pdf",
-                                "documentBase64" => $params['pdfDocument'],
-                        )),
+                array(
+                        "documentId" => "1",
+                        "name" => $params['documentName'],
+                        "documentBase64" => $params['pdfDocument'],
+                )),
                 "recipients" => array (
-                        "signers" => array(
-                                array(
-                                        "email" => "nebenmail09@gmail.com",
-                                        "name" => "Edwin",
-                                        "recipientId" => "1",
-                                        "clientUserId" => "1",
-                                        "tabs" => array (
-                                                "signHereTabs" => array (
-                                                        array (
-                                                                "xPosition" => "394",
-                                                                "yPosition" => "187",
-                                                                "documentId" => "1",
-                                                                "recipientId" => "1",
-                                                                "pageNumber" => "3"
-                                                        )
-                                                ),
-                                                "dateSignedTabs" => array (
-                                                        array (
-                                                                "xPosition" => "119",
-                                                                "yPosition" => "220",
-                                                                "documentId" => "1",
-                                                                "fontSize" => "Size16",
-                                                                "recipientId" => "1",
-                                                                "pageNumber" => "3",
-                                                        )
+                "signers" => array(
+                        array(
+                                "email" => $recipient->email,
+                                "name" => $recipient->firstname,
+                                "recipientId" => $recipient->id,
+                                "clientUserId" => $recipient->id,
+                                "tabs" => array (
+                                        "signHereTabs" => array (
+                                                array (
+                                                        "xPosition" => "394",
+                                                        "yPosition" => "187",
+                                                        "documentId" => "1",
+                                                        "recipientId" => $recipient->id,
+                                                        "pageNumber" => "1"
+                                                )
+                                        ),
+                                        "dateSignedTabs" => array (
+                                                array (
+                                                        "xPosition" => "119",
+                                                        "yPosition" => "220",
+                                                        "documentId" => "1",
+                                                        "fontSize" => "Size16",
+                                                        "recipientId" => $recipient->id,
+                                                        "pageNumber" => "1"
                                                 )
                                         )
                                 )
                         )
-                ),
+                )
+        ),
                 "status" => "sent",
         );
 
@@ -162,7 +182,18 @@ class local_digitalsignature_external extends external_api {
         $envelopeId = $response["envelopeId"];
         curl_close($curl);
 
-        return 'https://digitalsignature.moodle-dhbw.de/mod/digitalsignature/view.php?id=2&envelopeId=' . $envelopeId;;
+        $recipient->envelopeid = $envelopeId;
+
+        try {
+            $transaction = $DB->start_delegated_transaction();
+            $DB->update_record('recipientdata', $recipient, $bulk=false);
+            $transaction->allow_commit();
+        } catch (Exception $e) {
+            $transaction->rollback($e);
+        }
+
+        return "https://hardware-rental.moodle-dhbw.de/mod/digitalsignature/view.php?id=27&envelopeId=" . $envelopeId . "&recipientId=" . $recipient->id;
+
     }
 
     /**

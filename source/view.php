@@ -14,9 +14,9 @@ $email = "nebenmail09@gmail.com";
 $password = "qwert12345";
 $integratorKey = "3d677c95-6e5e-4133-9bd6-5670a4db865c"; //To identify third-party Apps
 
-$recipient_email = 'nebenmail09@gmail.com';
-$name = 'Edwin';
-$document_name = 'Bachelorthesis.pdf';
+$recipientId = $_GET['recipientId'];
+$recipient = $DB->get_record('recipientdata', array('id' => $recipientId), $fields='*', $strictness=IGNORE_MISSING);
+$envelopeId = $_GET['envelopeId'];
 
 // construct the authentication header:
 $header = "<DocuSignCredentials><Username>" . $email . "</Username><Password>" . $password . "</Password><IntegratorKey>" . $integratorKey . "</IntegratorKey></DocuSignCredentials>";
@@ -43,12 +43,10 @@ $accountId = $response["loginAccounts"][0]["accountId"];
 $baseUrl = $response["loginAccounts"][0]["baseUrl"];
 curl_close($curl);
 
-// 3: Get the URL of the Embedded Singing View
-$envelopeId = $_GET['envelopeId'];
-
-$data = array("returnUrl" => "http://www.docusign.com/devcenter",
-        "authenticationMethod" => "None", "email" => 'nebenmail09@gmail.com',
-        "userName" => 'Edwin', "recipientId" => "1", "clientUserId" => "1"
+$data = array("returnUrl" => "https://hardware-rental.moodle-dhbw.de/mod/digitalsignature/redirect.php?recipientId=" . $recipientId . "&envelopeId=" . $envelopeId,
+        "authenticationMethod" => "None", "email" => $recipient->email,
+        "userName" => $recipient->firstname,
+        "recipientId" => $recipientId, "clientUserId" => $recipientId
 );
 
 $data_string = json_encode($data);
@@ -72,8 +70,12 @@ if ( $status != 201 ) {
 
 $response = json_decode($json_response, true);
 $url = $response["url"];
+?>
 
-echo '<iframe width="700" height="500" src="' . $url . '">/iframe>';
-
+<div style="position:relative;padding-top:56.25%;">
+  <iframe src="<?php echo $url ?>" frameborder="0" allowfullscreen
+    style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>
+</div>
+<?php
 // Finish the page.
 echo $OUTPUT->footer();
