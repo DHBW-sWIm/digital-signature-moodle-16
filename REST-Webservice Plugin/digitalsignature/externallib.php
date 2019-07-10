@@ -71,21 +71,16 @@ class local_digitalsignature_external extends external_api {
             throw new moodle_exception('cannotviewprofile');
         }
 
-        if ($DB->record_exists('recipientdata', array('email' => $signers[0]['email'])) == FALSE) {
-            try {
-                $transaction = $DB->start_delegated_transaction();
-                $DB->insert_record('recipientdata', ['firstname' => $signers[0]['firstName'],
-                                                    'lastname' => $signers[0]['lastName'],
-                                                    'email' => $signers[0]['email'],
-                                                    'returnurl' => $params['returnUrl']],
-                                    $returnid=true, $bulk=false);
-                $transaction->allow_commit();
-            } catch (Exception $e) {
-                $transaction->rollback($e);
-            }
-        }
+        $transaction = $DB->start_delegated_transaction();
+        $lastinsertid = $DB->insert_record('recipientdata', ['firstname' => $signers[0]['firstName'],
+                                            'lastname' => $signers[0]['lastName'],
+                                            'email' => $signers[0]['email'],
+                                            'returnurl' => $params['returnUrl']],
+                            $returnid=true, $bulk=false);
+        $transaction->allow_commit();
 
-        $recipient = $DB->get_record('recipientdata', array('email' => $signers[0]['email']), $fields='*', $strictness=IGNORE_MISSING);
+
+        $recipient = $DB->get_record('recipientdata', array('id' => $lastinsertid), $fields='*', $strictness=IGNORE_MISSING);
 
         $email = "nebenmail09@gmail.com";
         $password = "qwert12345";
@@ -133,8 +128,8 @@ class local_digitalsignature_external extends external_api {
                                 "tabs" => array (
                                         "signHereTabs" => array (
                                                 array (
-                                                        "xPosition" => "394",
-                                                        "yPosition" => "187",
+                                                        "xPosition" => "368",
+                                                        "yPosition" => "515",
                                                         "documentId" => "1",
                                                         "recipientId" => $recipient->id,
                                                         "pageNumber" => "1"
@@ -142,8 +137,8 @@ class local_digitalsignature_external extends external_api {
                                         ),
                                         "dateSignedTabs" => array (
                                                 array (
-                                                        "xPosition" => "119",
-                                                        "yPosition" => "220",
+                                                        "xPosition" => "150",
+                                                        "yPosition" => "552",
                                                         "documentId" => "1",
                                                         "fontSize" => "Size16",
                                                         "recipientId" => $recipient->id,

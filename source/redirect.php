@@ -54,7 +54,6 @@ if ( $status != 200 ) {
 }
 
 $response = json_decode($json_response, true);
-print_r($response);
 curl_close($curl);
 
 $i = 0;
