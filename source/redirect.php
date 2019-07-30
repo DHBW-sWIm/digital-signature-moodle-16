@@ -78,7 +78,7 @@ foreach( $response["envelopeDocuments"] as $document ) {
     //file_put_contents($envelopeId . "-" . $document["name"], $data);
     $record = new stdClass();
     $record->pdf = $data;
-    $lastinsertid = $DB->insert_record('hardware_rental_pdf', $record, true);
+    $lastinsertid = $DB->insert_record('hardwarerental_pdf', $record, true);
 
     if ($i == 0) {
         $recipient->returnurl = $recipient->returnurl . "&documentId=" . $lastinsertid;
